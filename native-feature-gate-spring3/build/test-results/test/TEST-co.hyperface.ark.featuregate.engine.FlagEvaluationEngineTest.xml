@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.hyperface.ark.featuregate.engine.FlagEvaluationEngineTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-04-11T12:32:12.375Z" hostname="dhanush-k-gowda" time="0.047">
+  <properties/>
+  <testcase name="disabled flag always returns false regardless of rules" classname="co.hyperface.ark.featuregate.engine.FlagEvaluationEngineTest" time="0.013"/>
+  <testcase name="enabled flag with no rules returns true for everyone" classname="co.hyperface.ark.featuregate.engine.FlagEvaluationEngineTest" time="0.005"/>
+  <testcase name="enabled flag with GLOBAL_ON rule returns true" classname="co.hyperface.ark.featuregate.engine.FlagEvaluationEngineTest" time="0.008"/>
+  <testcase name="enabled flag with USER_WHITELIST returns true only for whitelisted users" classname="co.hyperface.ark.featuregate.engine.FlagEvaluationEngineTest" time="0.021"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,105 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "co.hyperface.ark",
+    "module": "native-feature-gate-spring2",
+    "version": "1.0.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.14.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "native-feature-gate-spring2-1.0.0.jar",
+          "url": "native-feature-gate-spring2-1.0.0.jar",
+          "size": 63147,
+          "sha512": "f18aca7567469300660696ba01ba0d3eb35a1d86729e29338b641f06ae158cf43ef01476d381f1d530a3b1e44303592cba40bb4aec2bcb2f2c528b61f8cb9d2e",
+          "sha256": "5a5673a48b06582513f3351ca40e26132ee8b6c7db52430dddbd9c20be958c98",
+          "sha1": "5f30d580944e46e679f46dbfea6d69387b1d0f77",
+          "md5": "052472bae6f3044158c214c339d0fc44"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.codehaus.groovy",
+          "module": "groovy-all",
+          "version": {
+            "requires": "3.0.15"
+          }
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-data-jpa"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-web"
+        },
+        {
+          "group": "org.springframework.boot",
+          "module": "spring-boot-starter-validation"
+        },
+        {
+          "group": "com.fasterxml.jackson.core",
+          "module": "jackson-databind"
+        }
+      ],
+      "files": [
+        {
+          "name": "native-feature-gate-spring2-1.0.0.jar",
+          "url": "native-feature-gate-spring2-1.0.0.jar",
+          "size": 63147,
+          "sha512": "f18aca7567469300660696ba01ba0d3eb35a1d86729e29338b641f06ae158cf43ef01476d381f1d530a3b1e44303592cba40bb4aec2bcb2f2c528b61f8cb9d2e",
+          "sha256": "5a5673a48b06582513f3351ca40e26132ee8b6c7db52430dddbd9c20be958c98",
+          "sha1": "5f30d580944e46e679f46dbfea6d69387b1d0f77",
+          "md5": "052472bae6f3044158c214c339d0fc44"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "native-feature-gate-spring2-1.0.0-sources.jar",
+          "url": "native-feature-gate-spring2-1.0.0-sources.jar",
+          "size": 14057,
+          "sha512": "79d77521406e261b9e45f290fa80ce8491eeb2087021321c6a2286de5720afd5e8a544e2e7a262ee7892bed91c71c5e8fa19ff379ca48b91ea0a4402e4c62aa7",
+          "sha256": "c589a1e450c50da5cd442a533077deb1a47d36cb7c9b2b273245abaf4d3a7672",
+          "sha1": "0f0003b9ac18f313a62140e43e3d4cd20a34a2cb",
+          "md5": "918db5a02102a2e6c52f8b6a46c1b601"
+        }
+      ]
+    }
+  ]
+}

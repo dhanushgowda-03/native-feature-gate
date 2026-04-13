@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.hyperface.ark.featuregate.strategy.StrategyTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-04-11T12:32:12.426Z" hostname="dhanush-k-gowda" time="0.032">
+  <properties/>
+  <testcase name="GlobalStrategy always returns true" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.0"/>
+  <testcase name="UserWhitelistStrategy returns true only for listed userIds" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.001"/>
+  <testcase name="UserWhitelistStrategy returns false when parameters is null or empty [params: null, #0]" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.0"/>
+  <testcase name="UserWhitelistStrategy returns false when parameters is null or empty [params: {}, #1]" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.0"/>
+  <testcase name="UserWhitelistStrategy returns false when parameters is null or empty [params: {&quot;userIds&quot;: []}, #2]" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.0"/>
+  <testcase name="PercentageRolloutStrategy is deterministic for same userId and flagKey" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.02"/>
+  <testcase name="PercentageRolloutStrategy returns false when userId is absent" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.0"/>
+  <testcase name="PercentageRolloutStrategy returns false for 0% and true for 100%" classname="co.hyperface.ark.featuregate.strategy.StrategyTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.hyperface.ark.featuregate.SpringContextTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-04-11T12:32:14.526Z" hostname="dhanush-k-gowda" time="0.102">
+  <properties/>
+  <testcase name="spring context loads and all core beans are present()" classname="co.hyperface.ark.featuregate.SpringContextTest" time="0.093"/>
+  <testcase name="isEnabled returns false for unknown flag key()" classname="co.hyperface.ark.featuregate.SpringContextTest" time="0.008"/>
+  <system-out><![CDATA[18:02:12.514 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Neither @ContextConfiguration nor @ContextHierarchy found for test class [SpringContextTest]: using SpringBootContextLoader
+18:02:12.517 [Test worker] DEBUG org.springframework.test.context.support.AbstractContextLoader -- Could not detect default resource locations for test class [co.hyperface.ark.featuregate.SpringContextTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+18:02:12.527 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using ContextCustomizers for test class [SpringContextTest]: [SpockContextCustomizer, DisableObservabilityContextCustomizer, PropertyMappingContextCustomizer, WebDriverContextCustomizer, ExcludeFilterContextCustomizer, DuplicateJsonObjectContextCustomizer, MockitoContextCustomizer, TestRestTemplateContextCustomizer]
+18:02:12.575 [Test worker] DEBUG org.springframework.test.context.util.TestContextSpringFactoriesUtils -- Skipping candidate TestExecutionListener [org.springframework.test.context.observation.MicrometerObservationRegistryTestExecutionListener] due to a missing dependency. Specify custom TestExecutionListener classes or make the default TestExecutionListener classes and their required dependencies available. Offending class: io.micrometer.context.ThreadLocalAccessor. MicrometerObservationRegistryTestExecutionListener requires io.micrometer:micrometer-observation:1.10.8 or higher and io.micrometer:context-propagation:1.0.3 or higher.
+18:02:12.579 [Test worker] DEBUG org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Using TestExecutionListeners for test class [SpringContextTest]: [ServletTestExecutionListener, DirtiesContextBeforeModesTestExecutionListener, ApplicationEventsTestExecutionListener, MockitoTestExecutionListener, DependencyInjectionTestExecutionListener, DirtiesContextTestExecutionListener, TransactionalTestExecutionListener, SqlScriptsTestExecutionListener, EventPublishingTestExecutionListener, RestDocsTestExecutionListener, MockRestServiceServerResetTestExecutionListener, MockMvcPrintOnlyOnFailureTestExecutionListener, WebDriverTestExecutionListener, MockWebServiceServerTestExecutionListener, ResetMocksTestExecutionListener, SpringMockTestExecutionListener]
+18:02:12.579 [Test worker] DEBUG org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener -- Before test class: class [SpringContextTest], class annotated with @DirtiesContext [false] with mode [null]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v3.0.12)
+
+2026-04-11T18:02:12.723+05:30  INFO 13521 --- [    Test worker] c.h.ark.featuregate.SpringContextTest    : Starting SpringContextTest using Java 17.0.18 with PID 13521 (started by dhanush-k-gowda in /home/dhanush-k-gowda/Documents/the-ark/native-feature-gate/native-feature-gate-spring3)
+2026-04-11T18:02:12.724+05:30  INFO 13521 --- [    Test worker] c.h.ark.featuregate.SpringContextTest    : No active profile set, falling back to 1 default profile: "default"
+2026-04-11T18:02:13.015+05:30  INFO 13521 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-11T18:02:13.044+05:30  INFO 13521 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 2 JPA repository interfaces.
+2026-04-11T18:02:13.202+05:30  INFO 13521 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-11T18:02:13.278+05:30  INFO 13521 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:featuregatetest user=SA
+2026-04-11T18:02:13.279+05:30  INFO 13521 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-11T18:02:13.330+05:30  INFO 13521 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-11T18:02:13.347+05:30  INFO 13521 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.1.7.Final
+2026-04-11T18:02:13.468+05:30  INFO 13521 --- [    Test worker] SQL dialect                              : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2026-04-11T18:02:13.850+05:30  INFO 13521 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2026-04-11T18:02:13.854+05:30  INFO 13521 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-11T18:02:14.094+05:30  WARN 13521 --- [    Test worker] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: co.hyperface.ark.featuregate.repository.FeatureFlagRepository
+2026-04-11T18:02:14.174+05:30  INFO 13521 --- [    Test worker] c.h.ark.featuregate.cache.FlagCache      : FlagCache initialised with 0 flags for environment 'test'
+2026-04-11T18:02:14.192+05:30  WARN 13521 --- [    Test worker] ocalVariableTableParameterNameDiscoverer : Using deprecated '-debug' fallback for parameter name resolution. Compile the affected code with '-parameters' instead or avoid its introspection: co.hyperface.ark.featuregate.repository.FlagAuditLogRepository
+2026-04-11T18:02:14.281+05:30  WARN 13521 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-11T18:02:14.429+05:30  WARN 13521 --- [    Test worker] .b.a.g.t.GroovyTemplateAutoConfiguration : Cannot find template location: classpath:/templates/ (please add some templates, check your Groovy configuration, or set spring.groovy.template.check-template-location=false)
+2026-04-11T18:02:14.517+05:30  INFO 13521 --- [    Test worker] c.h.ark.featuregate.SpringContextTest    : Started SpringContextTest in 1.909 seconds (process running for 2.793)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

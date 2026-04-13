@@ -1,0 +1,3 @@
+jdk_version: "17"
+build_tool: "gradle"
+gradle_version: "8.4"
