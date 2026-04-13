@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>native-feature-gate · Data Entity Map</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #f8fafc;
+    }
+    header p {
+      margin-top: 0.4rem;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .grid .full { grid-column: 1 / -1; }
+
+    .card {
+      background: #1e2130;
+      border: 1px solid #2d3348;
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      overflow: hidden;
+    }
+    .card h2 {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 1rem;
+    }
+
+    /* ── ERD ── */
+    .mermaid { display: flex; justify-content: center; }
+    .mermaid svg { max-width: 100%; height: auto; }
+
+    /* ── entity cards ── */
+    .entity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .entity {
+      background: #151822;
+      border: 1px solid #2d3348;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .entity-header {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .entity-body {
+      padding: 0.5rem 0.9rem 0.75rem;
+    }
+    .field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      padding: 0.18rem 0;
+      border-bottom: 1px solid #1e2130;
+      gap: 0.5rem;
+    }
+    .field:last-child { border-bottom: none; }
+    .field-name { color: #cbd5e1; }
+    .field-type { color: #64748b; font-style: italic; white-space: nowrap; }
+    .badge {
+      font-size: 0.6rem;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .pk  { background: #854d0e; color: #fef08a; }
+    .fk  { background: #1e3a5f; color: #93c5fd; }
+    .uq  { background: #14532d; color: #86efac; }
+    .nn  { background: #2d1b4e; color: #c4b5fd; }
+
+    /* colours per entity */
+    .c-flag    { background: #1d3461; border-color: #3b82f6; }
+    .c-rule    { background: #1c3a2b; border-color: #22c55e; }
+    .c-audit   { background: #3b1f1f; border-color: #ef4444; }
+    .c-ctx     { background: #2d2416; border-color: #f59e0b; }
+    .c-strat   { background: #2a1f38; border-color: #a855f7; }
+    .c-dto     { background: #1e2e3a; border-color: #06b6d4; }
+
+    /* ── relationship table ── */
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th {
+      text-align: left;
+      padding: 0.45rem 0.7rem;
+      color: #94a3b8;
+      font-weight: 600;
+      border-bottom: 1px solid #2d3348;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    td { padding: 0.45rem 0.7rem; border-bottom: 1px solid #1e2130; }
+    tr:last-child td { border-bottom: none; }
+    .tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .one-to-many { background: #1d3461; color: #93c5fd; }
+    .independent { background: #2d2416; color: #fcd34d; }
+    .strategy    { background: #2a1f38; color: #d8b4fe; }
+
+    /* ── strategy list ── */
+    .strat-list { display: flex; flex-direction: column; gap: 0.7rem; }
+    .strat-item {
+      background: #151822;
+      border: 1px solid #2d3348;
+      border-left: 3px solid #a855f7;
+      border-radius: 6px;
+      padding: 0.6rem 0.9rem;
+    }
+    .strat-name { font-size: 0.82rem; font-weight: 600; color: #d8b4fe; }
+    .strat-desc { font-size: 0.75rem; color: #94a3b8; margin-top: 0.2rem; }
+    .strat-param { font-size: 0.72rem; color: #64748b; margin-top: 0.15rem; font-family: monospace; }
+
+    /* ── flow diagram ── */
+    #flow-diagram { display: flex; justify-content: center; }
+    #flow-diagram svg { max-width: 100%; height: auto; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>native-feature-gate · Data Entity Map</h1>
+  <p>Spring Boot Feature Flag Library · Groovy + JPA · co.hyperface.ark</p>
+</header>
+
+<div class="grid">
+
+  <!-- ── ERD ── -->
+  <div class="card full">
+    <h2>Entity Relationship Diagram</h2>
+    <div class="mermaid">
+erDiagram
+    FEATURE_FLAGS {
+        BIGSERIAL id PK
+        VARCHAR flag_key "NOT NULL"
+        VARCHAR name "NOT NULL"
+        TEXT description
+        BOOLEAN enabled "DEFAULT FALSE"
+        VARCHAR environment "NOT NULL"
+        TIMESTAMP created_at "NOT NULL"
+        TIMESTAMP updated_at "NOT NULL"
+    }
+
+    FLAG_RULES {
+        BIGSERIAL id PK
+        BIGINT flag_id FK
+        VARCHAR strategy "NOT NULL"
+        TEXT parameters
+        TIMESTAMP created_at "NOT NULL"
+    }
+
+    GATE_AUDIT_LOG {
+        BIGSERIAL id PK
+        VARCHAR flag_key "NOT NULL"
+        VARCHAR environment "NOT NULL"
+        VARCHAR changed_by
+        VARCHAR change_type "NOT NULL"
+        TEXT old_value
+        TEXT new_value
+        TIMESTAMP changed_at "NOT NULL"
+    }
+
+    FEATURE_FLAGS ||--o{ FLAG_RULES : "has rules (CASCADE DELETE)"
+    FEATURE_FLAGS }o..o{ GATE_AUDIT_LOG : "audited by (denormalized)"
+    </div>
+  </div>
+
+  <!-- ── Entities ── -->
+  <div class="card full">
+    <h2>Entities & Fields</h2>
+    <div class="entity-grid">
+
+      <!-- FeatureFlag -->
+      <div class="entity">
+        <div class="entity-header c-flag">FeatureFlag <small style="font-weight:400;color:#93c5fd">· feature_flags</small></div>
+        <div class="entity-body">
+          <div class="field"><span class="field-name">id</span><span><span class="badge pk">PK</span> <span class="field-type">Long</span></span></div>
+          <div class="field"><span class="field-name">flagKey</span><span><span class="badge uq">UQ</span><span class="badge nn">NN</span> <span class="field-type">String</span></span></div>
+          <div class="field"><span class="field-name">name</span><span><span class="badge nn">NN</span> <span class="field-type">String</span></span></div>
+          <div class="field"><span class="field-name">description</span><span class="field-type">String (TEXT)</span></div>
+          <div class="field"><span class="field-name">enabled</span><span><span class="badge nn">NN</span> <span class="field-type">Boolean</span></span></div>
+          <div class="field"><span class="field-name">environment</span><span><span class="badge uq">UQ</span><span class="badge nn">NN</span> <span class="field-type">String</span></span></div>
+          <div class="field"><span class="field-name">createdAt</span><span><span class="badge nn">NN</span> <span class="field-type">LocalDateTime</span></span></div>
+          <div class="field"><span class="field-name">updatedAt</span><span><span class="badge nn">NN</span> <span class="field-type">LocalDateTime</span></span></div>
+          <div class="field"><span class="field-name">rules</span><span class="field-type">List&lt;FlagRule&gt;</span></div>
+        </div>
+      </div>
+
+      <!-- FlagRule -->
+      <div class="entity">
+        <div class="entity-header c-rule">FlagRule <small style="font-weight:400;color:#86efac">· flag_rules</small></div>
+        <div class="entity-body">
+          <div class="field"><span class="field-name">id</span><span><span class="badge pk">PK</span> <span class="field-type">Long</span></span></div>
+          <div class="field"><span class="field-name">flag</span><span><span class="badge fk">FK</span> <span class="field-type">FeatureFlag</span></span></div>
+          <div class="field"><span class="field-name">strategy</span><span><span class="badge nn">NN</span> <span class="field-type">StrategyType</span></span></div>
+          <div class="field"><span class="field-name">parameters</span><span class="field-type">String (JSON)</span></div>
+          <div class="field"><span class="field-name">createdAt</span><span><span class="badge nn">NN</span> <span class="field-type">LocalDateTime</span></span></div>
+        </div>
+      </div>
+
+      <!-- FlagAuditLog -->
+      <div class="entity">
+        <div class="entity-header c-audit">FlagAuditLog <small style="font-weight:400;color:#fca5a5">· gate_audit_log</small></div>
+        <div class="entity-body">
+          <div class="field"><span class="field-name">id</span><span><span class="badge pk">PK</span> <span class="field-type">Long</span></span></div>
+          <div class="field"><span class="field-name">flagKey</span><span><span class="badge nn">NN</span> <span class="field-type">String</span></span></div>
+          <div class="field"><span class="field-name">environment</span><span><span class="badge nn">NN</span> <span class="field-type">String</span></span></div>
+          <div class="field"><span class="field-name">changedBy</span><span class="field-type">String</span></div>
+          <div class="field"><span class="field-name">changeType</span><span><span class="badge nn">NN</span> <span class="field-type">String</span></span></div>
+          <div class="field"><span class="field-name">oldValue</span><span class="field-type">String (JSON)</span></div>
+          <div class="field"><span class="field-name">newValue</span><span class="field-type">String (JSON)</span></div>
+          <div class="field"><span class="field-name">changedAt</span><span><span class="badge nn">NN</span> <span class="field-type">LocalDateTime</span></span></div>
+        </div>
+      </div>
+
+      <!-- FlagContext -->
+      <div class="entity">
+        <div class="entity-header c-ctx">FlagContext <small style="font-weight:400;color:#fcd34d">· POJO (no table)</small></div>
+        <div class="entity-body">
+          <div class="field"><span class="field-name">userId</span><span class="field-type">String</span></div>
+          <div class="field"><span class="field-name">tenantId</span><span class="field-type">String</span></div>
+          <div class="field"><span class="field-name">properties</span><span class="field-type">Map&lt;String,String&gt;</span></div>
+          <div style="margin-top:0.6rem;font-size:0.7rem;color:#64748b">
+            Factory: <code style="color:#fcd34d">empty()</code> · <code style="color:#fcd34d">of(userId)</code> · <code style="color:#fcd34d">withProperties()</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- StrategyType enum -->
+      <div class="entity">
+        <div class="entity-header c-strat">StrategyType <small style="font-weight:400;color:#d8b4fe">· Enum</small></div>
+        <div class="entity-body">
+          <div class="field"><span class="field-name">GLOBAL_ON</span><span class="field-type">always true</span></div>
+          <div class="field"><span class="field-name">USER_WHITELIST</span><span class="field-type">userId list</span></div>
+          <div class="field"><span class="field-name">PERCENTAGE_ROLLOUT</span><span class="field-type">hash % 100</span></div>
+        </div>
+      </div>
+
+      <!-- DTOs -->
+      <div class="entity">
+        <div class="entity-header c-dto">DTOs <small style="font-weight:400;color:#67e8f9">· REST layer</small></div>
+        <div class="entity-body">
+          <div style="font-size:0.72rem;color:#94a3b8;padding:0.15rem 0;border-bottom:1px solid #1e2130">CreateFlagRequest</div>
+          <div class="field" style="padding-left:0.5rem"><span class="field-name">flagKey, name, description</span></div>
+          <div class="field" style="padding-left:0.5rem"><span class="field-name">enabled, rules[]</span></div>
+          <div style="font-size:0.72rem;color:#94a3b8;padding:0.4rem 0 0.15rem;border-bottom:1px solid #1e2130">FlagRuleRequest</div>
+          <div class="field" style="padding-left:0.5rem"><span class="field-name">strategy, parameters</span></div>
+          <div style="font-size:0.72rem;color:#94a3b8;padding:0.4rem 0 0.15rem;border-bottom:1px solid #1e2130">FlagResponse</div>
+          <div class="field" style="padding-left:0.5rem"><span class="field-name">id, flagKey, name, rules[]</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Relationships ── -->
+  <div class="card">
+    <h2>Relationships</h2>
+    <table>
+      <thead>
+        <tr><th>From</th><th>To</th><th>Type</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FeatureFlag</td>
+          <td>FlagRule</td>
+          <td><span class="tag one-to-many">1 : N</span></td>
+          <td>mappedBy="flag", CascadeAll, orphanRemoval, EAGER fetch</td>
+        </tr>
+        <tr>
+          <td>FlagRule</td>
+          <td>FeatureFlag</td>
+          <td><span class="tag one-to-many">N : 1</span></td>
+          <td>FK flag_id → feature_flags.id, ON DELETE CASCADE</td>
+        </tr>
+        <tr>
+          <td>FlagAuditLog</td>
+          <td>FeatureFlag</td>
+          <td><span class="tag independent">Denormalized</span></td>
+          <td>Stores flagKey as VARCHAR — no FK constraint (intentional)</td>
+        </tr>
+        <tr>
+          <td>FlagRule</td>
+          <td>StrategyType</td>
+          <td><span class="tag strategy">Enum ref</span></td>
+          <td>strategy column stores enum name as VARCHAR(50)</td>
+        </tr>
+        <tr>
+          <td>FlagContext</td>
+          <td>FlagEvaluationEngine</td>
+          <td><span class="tag strategy">Runtime</span></td>
+          <td>Passed per-evaluation; never persisted</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Strategies ── -->
+  <div class="card">
+    <h2>Evaluation Strategies</h2>
+    <div class="strat-list">
+      <div class="strat-item">
+        <div class="strat-name">GLOBAL_ON</div>
+        <div class="strat-desc">Flag enabled for every user, always.</div>
+        <div class="strat-param">parameters: null or {}</div>
+      </div>
+      <div class="strat-item">
+        <div class="strat-name">USER_WHITELIST</div>
+        <div class="strat-desc">Enabled only if context.userId is in the explicit list.</div>
+        <div class="strat-param">parameters: {"userIds": ["u1", "u2", ...]}</div>
+      </div>
+      <div class="strat-item">
+        <div class="strat-name">PERCENTAGE_ROLLOUT</div>
+        <div class="strat-desc">Deterministic hash(userId:flagKey) % 100 &lt; percentage.</div>
+        <div class="strat-param">parameters: {"percentage": 10}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Data Flow ── -->
+  <div class="card full">
+    <h2>Runtime Data Flow</h2>
+    <div class="mermaid" id="flow-diagram">
+flowchart LR
+    A([Microservice]) -->|isEnabled&#40;flagKey, userId&#41;| B[NativeFeatureGate]
+    B -->|get&#40;flagKey&#41;| C[(FlagCache\nConcurrentHashMap)]
+    C -->|cache miss / refresh| D[(DB: feature_flags\n+ flag_rules)]
+    B --> E[FlagEvaluationEngine]
+    E --> F{rules?}
+    F -->|none| G([true — global on])
+    F -->|has rules| H{ANY rule matches?}
+    H -->|GLOBAL_ON| I([true])
+    H -->|USER_WHITELIST| J{userId in list?}
+    H -->|PERCENTAGE_ROLLOUT| K{hash &#37; 100 &lt; pct?}
+    J -->|yes| L([true])
+    J -->|no| M([false])
+    K -->|yes| N([true])
+    K -->|no| O([false])
+
+    style C fill:#1d3461,stroke:#3b82f6
+    style D fill:#1c3a2b,stroke:#22c55e
+    style E fill:#2a1f38,stroke:#a855f7
+    </div>
+  </div>
+
+  <!-- ── DB Schema ── -->
+  <div class="card full">
+    <h2>Database Schema Summary</h2>
+    <table>
+      <thead>
+        <tr><th>Table</th><th>Columns</th><th>Constraints</th><th>Indexes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>feature_flags</strong></td>
+          <td>id, flag_key, name, description, enabled, environment, created_at, updated_at</td>
+          <td>PK(id), UNIQUE(flag_key, environment), NOT NULL on key cols</td>
+          <td>idx_feature_flags_env (environment)</td>
+        </tr>
+        <tr>
+          <td><strong>flag_rules</strong></td>
+          <td>id, flag_id, strategy, parameters, created_at</td>
+          <td>PK(id), FK flag_id → feature_flags(id) ON DELETE CASCADE</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong>gate_audit_log</strong></td>
+          <td>id, flag_key, environment, changed_by, change_type, old_value, new_value, changed_at</td>
+          <td>PK(id), NOT NULL on flag_key/environment/change_type/changed_at</td>
+          <td>idx_audit_log_flag_env (flag_key, environment)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /grid -->
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1d3461',
+      primaryTextColor: '#e2e8f0',
+      primaryBorderColor: '#3b82f6',
+      lineColor: '#475569',
+      secondaryColor: '#1c3a2b',
+      tertiaryColor: '#2a1f38',
+      edgeLabelBackground: '#1e2130',
+      fontSize: '14px'
+    },
+    er: { diagramPadding: 30, useMaxWidth: true },
+    flowchart: { useMaxWidth: true, htmlLabels: true }
+  });
+</script>
+
+</body>
+</html>
