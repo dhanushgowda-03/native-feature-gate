@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface FlagAuditLogRepository extends JpaRepository<FlagAuditLog, Long> {
 
-    List<FlagAuditLog> findByFlagKeyAndEnvironmentOrderByChangedAtDesc(String flagKey, String environment, Pageable pageable)
+    List<FlagAuditLog> findByFlagKeyOrderByChangedAtDesc(String flagKey, Pageable pageable)
 }

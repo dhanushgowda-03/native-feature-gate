@@ -15,12 +15,6 @@ class FlagAuditLog {
     @Column(name = "flag_key", nullable = false)
     String flagKey
 
-    @Column(nullable = false)
-    String environment
-
-    @Column(name = "changed_by")
-    String changedBy
-
     // CREATED | UPDATED | TOGGLED | DELETED
     @Column(name = "change_type", nullable = false)
     String changeType

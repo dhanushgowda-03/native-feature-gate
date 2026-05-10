@@ -3,25 +3,19 @@ package co.hyperface.ark.featuregate.admin.dto
 import co.hyperface.ark.featuregate.strategy.StrategyType
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
-import jakarta.validation.constraints.AssertTrue
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
+
+import javax.validation.constraints.AssertTrue
+import javax.validation.constraints.NotBlank
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class CreateFlagRequest {
+class UpdateFlagRequest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper()
-
-    @NotBlank
-    @Pattern(regexp = "[a-z0-9\\-_]+", message = "flagKey must contain only lowercase letters, digits, hyphens, or underscores")
-    String flagKey
 
     @NotBlank
     String name
 
     String description
-
-    boolean enabled = false
 
     StrategyType strategy
 

@@ -12,8 +12,8 @@ class FlagResponse {
     String name
     String description
     boolean enabled
-    String environment
-    List<RuleResponse> rules
+    StrategyType strategy
+    String parameters
     LocalDateTime createdAt
     LocalDateTime updatedAt
 
@@ -24,18 +24,10 @@ class FlagResponse {
             name: flag.name,
             description: flag.description,
             enabled: flag.enabled,
-            environment: flag.environment,
+            strategy: flag.strategy,
+            parameters: flag.parameters,
             createdAt: flag.createdAt,
-            updatedAt: flag.updatedAt,
-            rules: flag.rules?.collect { rule ->
-                new RuleResponse(id: rule.id, strategy: rule.strategy, parameters: rule.parameters)
-            } ?: []
+            updatedAt: flag.updatedAt
         )
-    }
-
-    static class RuleResponse {
-        Long id
-        StrategyType strategy
-        String parameters
     }
 }

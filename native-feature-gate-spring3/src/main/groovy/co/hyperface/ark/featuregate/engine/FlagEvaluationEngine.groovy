@@ -7,10 +7,15 @@ import co.hyperface.ark.featuregate.strategy.GlobalStrategy
 import co.hyperface.ark.featuregate.strategy.PercentageRolloutStrategy
 import co.hyperface.ark.featuregate.strategy.StrategyType
 import co.hyperface.ark.featuregate.strategy.UserWhitelistStrategy
+import io.micrometer.core.instrument.MeterRegistry
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
 class FlagEvaluationEngine {
+
+    @Autowired(required = false)
+    private MeterRegistry meterRegistry
 
     private final Map<StrategyType, EvaluationStrategy> strategies = [
         (StrategyType.GLOBAL_ON)           : new GlobalStrategy(),
@@ -20,14 +25,16 @@ class FlagEvaluationEngine {
 
     boolean evaluate(FeatureFlag flag, FlagContext context) {
         if (!flag.enabled) return false
-
-        // No rules = flag is globally on for everyone
-        if (!flag.rules || flag.rules.isEmpty()) return true
-
-        // Any rule match = enabled for this context
-        return flag.rules.any { rule ->
-            EvaluationStrategy strategy = strategies[rule.strategy]
-            strategy ? strategy.evaluate(rule, context, flag.flagKey) : false
+        if (!flag.strategy) {
+            meterRegistry?.counter('feature.gate.strategy', 'type', 'none')?.increment()
+            return true
         }
+        EvaluationStrategy strategy = strategies[flag.strategy]
+        if (!strategy) {
+            meterRegistry?.counter('feature.gate.strategy', 'type', 'unknown')?.increment()
+            return false
+        }
+        meterRegistry?.counter('feature.gate.strategy', 'type', flag.strategy.name())?.increment()
+        return strategy.evaluate(flag, context)
     }
 }

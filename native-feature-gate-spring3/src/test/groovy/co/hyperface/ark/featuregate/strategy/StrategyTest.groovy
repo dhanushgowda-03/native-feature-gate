@@ -2,7 +2,6 @@ package co.hyperface.ark.featuregate.strategy
 
 import co.hyperface.ark.featuregate.model.FeatureFlag
 import co.hyperface.ark.featuregate.model.FlagContext
-import co.hyperface.ark.featuregate.model.FlagRule
 import spock.lang.Specification
 
 class StrategyTest extends Specification {
@@ -10,36 +9,37 @@ class StrategyTest extends Specification {
     def "GlobalStrategy always returns true"() {
         given:
         def strategy = new GlobalStrategy()
-        def rule = new FlagRule(strategy: StrategyType.GLOBAL_ON)
+        def flag = new FeatureFlag(flagKey: "any-flag", strategy: StrategyType.GLOBAL_ON)
 
         expect:
-        strategy.evaluate(rule, FlagContext.empty(), "any-flag")
-        strategy.evaluate(rule, FlagContext.of("u1"), "any-flag")
-        strategy.evaluate(rule, FlagContext.withProperties(["tier": "premium"]), "any-flag")
+        strategy.evaluate(flag, FlagContext.empty())
+        strategy.evaluate(flag, FlagContext.of("u1"))
+        strategy.evaluate(flag, FlagContext.withProperties(["tier": "premium"]))
     }
 
     def "UserWhitelistStrategy returns true only for listed userIds"() {
         given:
         def strategy = new UserWhitelistStrategy()
-        def rule = new FlagRule(
+        def flag = new FeatureFlag(
+            flagKey: "flag",
             strategy: StrategyType.USER_WHITELIST,
             parameters: '{"userIds": ["user-1", "user-2"]}'
         )
 
         expect:
-        strategy.evaluate(rule, FlagContext.of("user-1"), "flag")
-        strategy.evaluate(rule, FlagContext.of("user-2"), "flag")
-        !strategy.evaluate(rule, FlagContext.of("user-99"), "flag")
-        !strategy.evaluate(rule, FlagContext.empty(), "flag")
+        strategy.evaluate(flag, FlagContext.of("user-1"))
+        strategy.evaluate(flag, FlagContext.of("user-2"))
+        !strategy.evaluate(flag, FlagContext.of("user-99"))
+        !strategy.evaluate(flag, FlagContext.empty())
     }
 
     def "UserWhitelistStrategy returns false when parameters is null or empty"() {
         given:
         def strategy = new UserWhitelistStrategy()
-        def rule = new FlagRule(strategy: StrategyType.USER_WHITELIST, parameters: params)
+        def flag = new FeatureFlag(flagKey: "flag", strategy: StrategyType.USER_WHITELIST, parameters: params)
 
         expect:
-        !strategy.evaluate(rule, FlagContext.of("user-1"), "flag")
+        !strategy.evaluate(flag, FlagContext.of("user-1"))
 
         where:
         params << [null, '{}', '{"userIds": []}']
@@ -48,13 +48,13 @@ class StrategyTest extends Specification {
     def "PercentageRolloutStrategy is deterministic for same userId and flagKey"() {
         given:
         def strategy = new PercentageRolloutStrategy()
-        def rule = new FlagRule(strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 50}')
+        def flag = new FeatureFlag(flagKey: "my-flag", strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 50}')
         def context = FlagContext.of("stable-user-id")
 
         when:
-        boolean first = strategy.evaluate(rule, context, "my-flag")
-        boolean second = strategy.evaluate(rule, context, "my-flag")
-        boolean third = strategy.evaluate(rule, context, "my-flag")
+        boolean first = strategy.evaluate(flag, context)
+        boolean second = strategy.evaluate(flag, context)
+        boolean third = strategy.evaluate(flag, context)
 
         then:
         first == second
@@ -64,19 +64,21 @@ class StrategyTest extends Specification {
     def "PercentageRolloutStrategy returns false when userId is absent"() {
         given:
         def strategy = new PercentageRolloutStrategy()
-        def rule = new FlagRule(strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 100}')
+        def flag = new FeatureFlag(flagKey: "my-flag", strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 100}')
 
         expect:
-        !strategy.evaluate(rule, FlagContext.empty(), "my-flag")
+        !strategy.evaluate(flag, FlagContext.empty())
     }
 
     def "PercentageRolloutStrategy returns false for 0% and true for 100%"() {
         given:
         def strategy = new PercentageRolloutStrategy()
         def context = FlagContext.of("any-user")
+        def flag0 = new FeatureFlag(flagKey: "flag", strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 0}')
+        def flag100 = new FeatureFlag(flagKey: "flag", strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 100}')
 
         expect:
-        !strategy.evaluate(new FlagRule(strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 0}'), context, "flag")
-        strategy.evaluate(new FlagRule(strategy: StrategyType.PERCENTAGE_ROLLOUT, parameters: '{"percentage": 100}'), context, "flag")
+        !strategy.evaluate(flag0, context)
+        strategy.evaluate(flag100, context)
     }
 }

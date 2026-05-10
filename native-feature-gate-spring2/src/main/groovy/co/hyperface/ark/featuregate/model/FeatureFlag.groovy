@@ -1,13 +1,12 @@
 package co.hyperface.ark.featuregate.model
 
+import co.hyperface.ark.featuregate.strategy.StrategyType
+
 import javax.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-@Table(
-    name = "feature_flags",
-    uniqueConstraints = @UniqueConstraint(columnNames = ["flag_key", "environment"])
-)
+@Table(name = "feature_flags", uniqueConstraints = @UniqueConstraint(columnNames = ["flag_key"]))
 class FeatureFlag {
 
     @Id
@@ -26,11 +25,13 @@ class FeatureFlag {
     @Column(nullable = false)
     boolean enabled = false
 
-    @Column(nullable = false)
-    String environment
+    @Enumerated(EnumType.STRING)
+    @Column
+    StrategyType strategy
 
-    @OneToMany(mappedBy = "flag", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    List<FlagRule> rules = []
+    // JSON params: {"userIds":["u1"]} for USER_WHITELIST, {"percentage":10} for PERCENTAGE_ROLLOUT
+    @Column(columnDefinition = "TEXT")
+    String parameters
 
     @Column(name = "created_at", nullable = false, updatable = false)
     LocalDateTime createdAt

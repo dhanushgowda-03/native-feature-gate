@@ -7,9 +7,10 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "ark.feature-gate")
 class FeatureGateProperties {
 
-    // Target environment — only flags for this environment are loaded into cache
-    String environment = "default"
+    // How long a cache entry is considered fresh. Override: ark.feature-gate.cache-ttl-ms
+    long cacheTtlMs = 120_000
 
-    // Cache refresh interval in ms (default 30s). Use ark.featureGate.cacheRefreshIntervalMs to override.
-    long cacheRefreshIntervalMs = 30_000
+    // Max age beyond which stale data is not served — blocking fetch attempted instead.
+    // Override: ark.feature-gate.max-stale-ms
+    long maxStaleMs = 3_600_000
 }
